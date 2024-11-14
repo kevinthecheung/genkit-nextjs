@@ -1,55 +1,30 @@
-import Link from "next/link";
+'use client';
+
+import { menuSuggestionFlow } from './genkit';
+import { useState } from 'react';
 
 export default function Home() {
-  const message = process.env["MESSAGE"] || "Hello!";
-  return (
-    <main className="content">
-      <h1 className="heading">Next.js on Firebase App Hosting</h1>
-      <p>{message}</p>
+  const [menuItem, setMenuItem] = useState<string>('');
 
-      <section className="features">
-        <article className="card">
-          <h2>Scalable, serverless backends</h2>
-          <p>
-            Dynamic content is served by{" "}
-            <Link
-              href="https://cloud.google.com/run/docs/overview/what-is-cloud-run"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Cloud Run
-            </Link>
-            , a fully managed container that scales up and down with demand.
-            Visit{" "}
-            <Link href="/ssr">
-              <code>/ssr</code>
-            </Link>{" "}
-            and{" "}
-            <Link href="/ssr/streaming">
-              <code>/ssr/streaming</code>
-            </Link>{" "}
-            to see the server in action.
-          </p>
-        </article>
-        <article className="card">
-          <h2>Global CDN</h2>
-          <p>
-            Cached content is served by{" "}
-            <Link
-              href="https://cloud.google.com/cdn/docs/overview"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Google Cloud CDN
-            </Link>
-            , a fast and secure way to host cached content globally. Visit
-            <Link href="/ssg">
-              {" "}
-              <code>/ssg</code>
-            </Link>{" "}
-          </p>
-        </article>
-      </section>
+  async function getMenuItem(formData: FormData) {
+    const theme = formData.get('theme')?.toString() ?? '';
+    const suggestion = await menuSuggestionFlow(theme);
+    setMenuItem(suggestion);
+  }
+
+  return (
+    <main>
+      <form action={getMenuItem}>
+        <label htmlFor="theme">
+          Suggest a menu item for a restaurant with this theme:{' '}
+        </label>
+        <input type="text" name="theme" id="theme" />
+        <br />
+        <br />
+        <button type="submit">Generate</button>
+      </form>
+      <br />
+      <pre>{menuItem}</pre>
     </main>
   );
 }

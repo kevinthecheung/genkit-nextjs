@@ -19,5 +19,5 @@ env:
 
   # Configure secrets
   # See https://firebase.google.com/docs/app-hosting/configure#secret-parameters
-  # - variable: API_KEY
-  #   secret: myApiKeySecret
+  - variable: GOOGLE_GENAI_API_KEY
+    secret: GOOGLE_GENAI_API_KEY
